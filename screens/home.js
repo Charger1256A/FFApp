@@ -1,17 +1,30 @@
 import React from 'react';
 import { StyleSheet, Text, View, TextInput, Button, ScrollView } from 'react-native';
+import AsyncStorage from '@react-native-community/async-storage';
+import Footer from '../components/footer';
 class Home extends React.Component {
+    constructor(props) {
+        super(props);
+        this._logout = this._logout.bind(this);
+    }
     static navigationOptions = ({ navigation }) => {
         return {
             title: navigation.getParam('team')
         };
     };
 
-    constructor(props) {
-        super(props);
-        this.state = {
+    
+    _logout = async () => {
+        this.props.navigation.navigate('loginScreen');
+        try {
+            await AsyncStorage.removeItem('name');
+            return true;
+        }
+        catch(exception) {
+            return false;
         }
     }
+
     render() {
         return (
             <View style={styles.container}>
@@ -19,12 +32,7 @@ class Home extends React.Component {
                     <Text>Body</Text>
                 </ScrollView>
                 <View style={styles.footer}>
-                    <View style={styles.footerBox}>
-                        <Text style={styles.footerText}>Box 1</Text>
-                    </View>
-                    <View style={styles.footerBox}>
-                        <Text style={styles.footerText}>Box 2</Text>
-                    </View>
+                    <Footer logout={this._logout}/>
                 </View>
             </View>
 
@@ -40,8 +48,8 @@ const styles = StyleSheet.create({
     },
     footer: {
         display: 'flex',
-        flexDirection: 'row',
-        backgroundColor: 'grey'
+        justifyContent: 'center',
+        alignItems: 'center'
     },
     footerBox: {
         flex: 0.5,
