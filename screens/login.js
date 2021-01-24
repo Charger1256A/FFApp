@@ -9,9 +9,29 @@ class Login extends React.Component {
         }
     }
     _login(){
-        this.props.navigation.navigate('homeScreen', {team: this.state.teamName})
+        console.log("hi")
+        let fetchLogin = async () => {
+            let response = await fetch('https://d7793bbb1208.ngrok.io/login/', {
+                method: 'POST',
+                headers: {
+                    Accept: 'application/json',
+                    'Content-Type': 'application/json',
+                  },
+                  body: JSON.stringify({
+                    teamName: this.state.teamName,
+                    pin: parseInt(this.state.PIN),
+                })
+            })
+            let data = await response.json()
+            console.log(data)
+            if (data["PIN"] == this.state.PIN){
+                this.props.navigation.navigate('homeScreen', {team: this.state.teamName})
+                return;
+            }
         
     }
+    fetchLogin();
+}
     
     render() {
         return (
