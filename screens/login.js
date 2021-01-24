@@ -1,17 +1,34 @@
 import React from 'react';
 import { StyleSheet, Text, View, TextInput, Button } from 'react-native';
+import AsyncStorage from '@react-native-community/async-storage';
+
 class Login extends React.Component {
     constructor(props) {
         super(props);
+        this.getData();
         this.state = {
             teamName: '',
             PIN: '',
         }
     }
+
+    getData = async () => {
+        try {
+            const value = await AsyncStorage.getItem('name')
+
+            if (value !== null){
+                this.props.navigation.navigate('homeScreen', {team: value});
+                // this.setState({ teamName: value })
+            }
+        } catch(e) {
+
+        }
+    }
+
     _login(){
         console.log("hi")
         let fetchLogin = async () => {
-            let response = await fetch('https://d7793bbb1208.ngrok.io/login/', {
+            let response = await fetch('http://localhost:4000/login/', {
                 method: 'POST',
                 headers: {
                     Accept: 'application/json',
@@ -19,15 +36,32 @@ class Login extends React.Component {
                   },
                   body: JSON.stringify({
                     teamName: this.state.teamName,
-                    pin: parseInt(this.state.PIN),
+                    pin: this.state.PIN,
                 })
             })
-            let data = await response.json()
+            try {
+                var data = await response.json()
+            }
+            catch(err) {
+                alert("Incorrect Username or Password");
+            }
+            
             console.log(data)
             if (data["PIN"] == this.state.PIN){
+                try {
+                    await AsyncStorage.setItem('name', this.state.teamName)
+                }
+                catch(err) {
+                    console.log(err)
+                }
                 this.props.navigation.navigate('homeScreen', {team: this.state.teamName})
                 return;
             }
+            // const AsyncAlert = async () => new Promise((resolve) => {
+            //     alert("Incorrect")
+            // })
+              
+            // await AsyncAlert();
         
     }
     fetchLogin();
