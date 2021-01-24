@@ -16,7 +16,7 @@ const screens = {
     homeScreen: {
         screen: homeScreen,
         navigationOptions: {
-            title: 'Home',
+            // title: 'Home',
             headerTitleStyle: {
                 color: 'black'
               }

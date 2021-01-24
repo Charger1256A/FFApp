@@ -57,11 +57,6 @@ class Login extends React.Component {
                 this.props.navigation.navigate('homeScreen', {team: this.state.teamName})
                 return;
             }
-            // const AsyncAlert = async () => new Promise((resolve) => {
-            //     alert("Incorrect")
-            // })
-              
-            // await AsyncAlert();
         
     }
     fetchLogin();
