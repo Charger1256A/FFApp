@@ -5,6 +5,9 @@ import Footer from '../components/footer';
 class Home extends React.Component {
     constructor(props) {
         super(props);
+        this.state = {
+            teams: []
+        }
         this._logout = this._logout.bind(this);
     }
     static navigationOptions = ({ navigation }) => {
@@ -12,6 +15,9 @@ class Home extends React.Component {
             title: navigation.getParam('team')
         };
     };
+    componentDidMount(){
+        this._getTeam()
+    }
 
     
     _logout = async () => {
@@ -25,11 +31,37 @@ class Home extends React.Component {
         }
     }
 
+    _getTeam() {
+        let fetchTeams = async () => {
+            let response = await fetch(`http://localhost:4000/${this.props.navigation.getParam('team')}/teams`, {
+                method: 'GET',
+                headers: {
+                    Accept: 'application/json',
+                    'Content-Type': 'application/json',
+                  },
+            })
+            try {
+                var data = await response.json();
+                delete data[0];
+                data = Object.values(data)
+                this.setState({ teams: data });
+            }
+            catch(err) {
+                alert(err);
+            }
+            console.log(`data: ${this.state.teams}`);
+        }
+        fetchTeams();
+    }
+
     render() {
+        var testBots = [123, 1234, 8, 12, 1255, 1323, 254, 973, 971, 33, 1339, 1410, 5406, 5026, 1678]
         return (
             <View style={styles.container}>
                 <ScrollView>
-                    <Text>Body</Text>
+                    {this.state.teams.map((bot, i) => {
+                        return <Text style={styles.botText} key={i}>{i + 1}. {bot.toString()}</Text>
+                    })}
                 </ScrollView>
                 <View style={styles.footer}>
                     <Footer logout={this._logout}/>
@@ -59,6 +91,10 @@ const styles = StyleSheet.create({
     },
     footerText: {
         fontSize: 18
+    },
+    botText: {
+        fontFamily: 'Cochin',
+        fontSize: 30,
     }
 })
 
