@@ -11,7 +11,22 @@ class Footer extends React.Component {
         return (
             <View style={styles.footer}>
                 <View style={styles.footerBox}>
-                    <Text style={styles.footerText}>Box 1</Text>
+                <Button 
+                    color = "black"
+                    title="Choose Teams"
+                    onPress={() => {
+                        this.props.chooseTeams()
+                    }}
+                    />
+                </View>
+                <View style={styles.footerBox}>
+                    <Button 
+                        color = "black"
+                        title="Home"
+                        onPress={() => {
+                            this.props.home()
+                        }}
+                        />
                 </View>
                 <View style={styles.footerBox}>
                     <Button 
@@ -39,7 +54,7 @@ const styles = StyleSheet.create({
         backgroundColor: 'grey'
     },
     footerBox: {
-        flex: 0.5,
+        flex: 1/3,
         justifyContent: 'center',
         alignItems: 'center',
         borderWidth: 2,
@@ -49,7 +64,7 @@ const styles = StyleSheet.create({
         
     },
     footerText: {
-        fontSize: 18
+        fontSize: 18,
     }
 })
 

@@ -16,17 +16,16 @@ class Login extends React.Component {
         try {
             const value = await AsyncStorage.getItem('name')
 
-            if (value !== null){
-                this.props.navigation.navigate('homeScreen', {team: value});
+            if (value !== null) {
+                this.props.navigation.navigate('homeScreen', { team: value });
                 // this.setState({ teamName: value })
             }
-        } catch(e) {
+        } catch (e) {
 
         }
     }
 
-    _login(){
-        console.log("hi")
+    _login() {
         let fetchLogin = async () => {
             let response = await fetch('http://localhost:4000/login/', {
                 method: 'POST',
@@ -61,7 +60,7 @@ class Login extends React.Component {
     }
     fetchLogin();
 }
-    
+
     render() {
         return (
             <View style={styles.container}>
@@ -87,12 +86,12 @@ class Login extends React.Component {
                     />
                 </View>
                 <View style={styles.row}>
-                    <Button 
-                    title="Login" 
-                    onPress={() => {
-                        // alert("hi")
-                        this._login()
-                    }}
+                    <Button
+                        title="Login"
+                        onPress={() => {
+                            // alert("hi")
+                            this._login()
+                        }}
                     />
                 </View>
             </View>

@@ -2,6 +2,7 @@ import { createStackNavigator } from 'react-navigation-stack';
 import { createAppContainer } from 'react-navigation';
 import loginScreen from '../screens/login';
 import homeScreen from '../screens/home';
+import chooseTeamScreen from '../screens/chooseTeams';
 
 const screens = {
     loginScreen: {
@@ -15,6 +16,15 @@ const screens = {
     },
     homeScreen: {
         screen: homeScreen,
+        navigationOptions: {
+            // title: 'Home',
+            headerTitleStyle: {
+                color: 'black'
+              }
+        }
+    },
+    chooseTeamsScreen: {
+        screen: chooseTeamScreen,
         navigationOptions: {
             // title: 'Home',
             headerTitleStyle: {

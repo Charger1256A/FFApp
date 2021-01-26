@@ -1,27 +1,25 @@
 import React from 'react';
-import { StyleSheet, Text, View, TextInput, Button, ScrollView } from 'react-native';
-import AsyncStorage from '@react-native-community/async-storage';
+import { StyleSheet, Text, View, Button, ScrollView, TouchableOpacity } from 'react-native';
 import Footer from '../components/footer';
-class Home extends React.Component {
+
+class ChooseTeam extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            teams: []
+            teams: this.props.navigation.getParam('teams'),
+            selectedTeams: [],
         }
         this._logout = this._logout.bind(this);
         this._chooseTeams = this._chooseTeams.bind(this);
         this._home = this._home.bind(this);
+        this._addTeam = this._addTeam.bind(this);
     }
     static navigationOptions = ({ navigation }) => {
         return {
-            title: `${navigation.getParam('team')} | Home`,
+            title: `${navigation.getParam('team')} | Team Selection`,
             headerLeft: null,
         };
     };
-    componentDidMount(){
-        this._getTeam()
-    }
-
     _chooseTeams(){
         this.props.navigation.navigate('chooseTeamsScreen', {team: this.props.navigation.getParam('team'), teams: this.state.teams})
     }
@@ -39,47 +37,43 @@ class Home extends React.Component {
             return false;
         }
     }
-
-    _getTeam() {
-        let fetchTeams = async () => {
-            let response = await fetch(`http://localhost:4000/${this.props.navigation.getParam('team')}/teams`, {
-                method: 'GET',
-                headers: {
-                    Accept: 'application/json',
-                    'Content-Type': 'application/json',
-                  },
-            })
-            try {
-                var data = await response.json();
-                delete data[0];
-                data = Object.values(data)
-                this.setState({ teams: data });
-            }
-            catch(err) {
-                alert(err);
-            }
-            // console.log(`data: ${this.state.teams}`);
+    _addTeam(bot){
+        var selected = this.state.selectedTeams;
+        if (selected.includes(bot)){
+            var index = selected.indexOf(bot);
+            selected.splice(index, 1);
+        } else {
+            selected.push(bot);
         }
-        fetchTeams();
+        this.setState({ selectedTeams: selected});
+        console.log(this.state.selectedTeams)
     }
-
-    render() {
-        var testBots = [123, 1234, 8, 12, 1255, 1323, 254, 973, 971, 33, 1339, 1410, 5406, 5026, 1678]
-        return (
+    render(){
+        // console.log(this.state.teams);
+        return(
             <View style={styles.container}>
                 <ScrollView>
-                    {this.state.teams.map((bot, i) => {
-                        return <Text style={styles.botText} key={i}>{i + 1}. {bot.toString()}</Text>
-                    })}
+                {this.state.teams.map((bot, i) => (
+                    this.state.selectedTeams.includes(bot) ? (
+                        <TouchableOpacity style={styles.highlightedButton} key={i} onPress={() => this._addTeam(bot)}>
+                            <Text style={styles.botText}>{i + 1}: {bot}</Text> 
+                        </TouchableOpacity>
+                    ):(
+                        <TouchableOpacity key={i} onPress={() => this._addTeam(bot)}>
+                            <Text style={styles.botText}>{i + 1}: {bot}</Text> 
+                        </TouchableOpacity>
+                    )
+
+                ))}
                 </ScrollView>
                 <View style={styles.footer}>
-                    <Footer logout={this._logout} chooseTeams={this._chooseTeams} home={this._home} />
+                    <Footer logout={this._logout} chooseTeams={this._chooseTeams} home={this._home}/>
                 </View>
             </View>
-
         )
     }
 }
+
 const styles = StyleSheet.create({
     container: {
         margin: 30,
@@ -104,7 +98,12 @@ const styles = StyleSheet.create({
     botText: {
         fontFamily: 'Cochin',
         fontSize: 30,
+        color: 'black'
+    },
+    highlightedButton:{
+        borderWidth: 3,
+        borderColor: '#ffff00'
     }
 })
 
-export default Home;
+export default ChooseTeam
