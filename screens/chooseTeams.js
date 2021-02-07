@@ -46,7 +46,28 @@ class ChooseTeam extends React.Component {
             selected.push(bot);
         }
         this.setState({ selectedTeams: selected});
-        console.log(this.state.selectedTeams)
+        // console.log(this.state.selectedTeams)
+    }
+    _submitTeams(){
+        var myArrayQry = this.state.selectedTeams.toString();
+        let fetchTeams = async () => {
+            let response = await fetch(`https://6bb6debf4fc0.ngrok.io/${myArrayQry}/validEntry`, {
+                method: 'GET',
+                headers: {
+                    Accept: 'application/json',
+                    'Content-Type': 'application/json',
+                  },
+            })
+            try {
+                var data = await response.json();
+                console.log(data);           
+            }
+            catch(err) {
+                alert(err);
+            }
+            // console.log(`data: ${this.state.teams}`);
+        }
+        fetchTeams();
     }
     render(){
         // console.log(this.state.teams);
@@ -65,6 +86,14 @@ class ChooseTeam extends React.Component {
                     )
 
                 ))}
+                <View style={styles.buttonContainer}>
+                    <Button 
+                        title="Confirm"
+                        onPress={() => {
+                            this._submitTeams()
+                        }}
+                    />
+                </View>
                 </ScrollView>
                 <View style={styles.footer}>
                     <Footer logout={this._logout} chooseTeams={this._chooseTeams} home={this._home}/>
@@ -103,6 +132,13 @@ const styles = StyleSheet.create({
     highlightedButton:{
         borderWidth: 3,
         borderColor: '#ffff00'
+    },
+    buttonContainer: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: 'lime',
+        borderRadius: 10
     }
 })
 

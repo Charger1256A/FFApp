@@ -27,7 +27,7 @@ class Login extends React.Component {
 
     _login() {
         let fetchLogin = async () => {
-            let response = await fetch('http://localhost:4000/login/', {
+            let response = await fetch('https://6bb6debf4fc0.ngrok.io/login/', {
                 method: 'POST',
                 headers: {
                     Accept: 'application/json',

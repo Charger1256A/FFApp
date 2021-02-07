@@ -42,7 +42,7 @@ class Home extends React.Component {
 
     _getTeam() {
         let fetchTeams = async () => {
-            let response = await fetch(`http://localhost:4000/${this.props.navigation.getParam('team')}/teams`, {
+            let response = await fetch(`https://6bb6debf4fc0.ngrok.io/${this.props.navigation.getParam('team')}/teams`, {
                 method: 'GET',
                 headers: {
                     Accept: 'application/json',
@@ -64,7 +64,6 @@ class Home extends React.Component {
     }
 
     render() {
-        var testBots = [123, 1234, 8, 12, 1255, 1323, 254, 973, 971, 33, 1339, 1410, 5406, 5026, 1678]
         return (
             <View style={styles.container}>
                 <ScrollView>
